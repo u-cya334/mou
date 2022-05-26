@@ -1,19 +1,32 @@
-from stat import FILE_ATTRIBUTE_NOT_CONTENT_INDEXED
-from flask import Flask,render_template,request
-from flask_socketio import SocketIO, send, emit
+from flask import Flask,request
+from flask import render_template
+from flask_socketio import SocketIO, send, emit, join_room
 
 app = Flask(__name__)
+socketio= SocketIO(app)
 
-socketio = SocketIO(app)
+@app.route('/home')
+def home():
+    return render_template('home.html')
 
-user_count = 0
-text = ""
+@app.route('/room/<room_id>')
+def room(room_id):
+    return render_template('room.html',room_id)
 
-@app.route('/')
-def index():
-    return render_template('./index.html')
+@app.route('/test/<number>')
+def test(number):
+    return render_template('test.html',number)
+
+@socketio.on("my event")
+def socket_test(table_id):
+    print(table_id)
+    emit("new_game",room=table_id, broadcast=True)
+
+@socketio.on("join")
+def join(table_id):
+    print(table_id)
+    join_room(table_id)
 
 
-
-if __name__ == '__main__':
-    socketio.run(app, debug=True)
+if __name__ == "__main__":
+    socketio.run(app,debug=True)
