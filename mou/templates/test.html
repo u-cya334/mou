@@ -7,10 +7,25 @@
     <title>Document</title>
 </head>
 <body>
+    <div id="app">
+        <div>現在の接続人数：</div><span id="counter">0</span>
+
+        <button v-on:click="button1">join_button</button>
+        <button v-on:click="start">start newgame</button>
+        <br>
+        <!-- {% set ns = namespace(cnt=0) %} -->
+        <div v-if="start_show">
+            {% for num in range(card_list|length) %}
+            <img v-on:click="pick_up({{num}})" id="{{num}}" src="{{ url_for('static', filename='img/19.png') }}" alt="" width="50" height="70">
+            {% endfor %}
+        </div>
+
+    </div>
 
     
-
     
+
+    <script src="{{ url_for('static', filename='js/axios.js') }}"></script>
     <script src="{{ url_for('static', filename='js/vue.js') }}"></script>
     <script src="{{ url_for('static', filename='js/socket.io.js') }}"></script>
     <script src="{{ url_for('static', filename='js/websocket_test.js') }}"></script>

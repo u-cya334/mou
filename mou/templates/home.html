@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
+    <title>厳選YouTubeホーム</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+</head>
+<body>
+    <div id="test">テストです</div>
+    <!-- forでも加算される変数cnt -->
+    <div id="app">
+        {% set ns = namespace(cnt=0) %}
+        {% for n1 in no %}
+            <div id="big_box" id={{n1}}>
+                {% for n2 in maxResult %}
+                    <div class="box" v-on:click="show" id={{ns.cnt}}>
+                        <img src={{videos_list[ns.cnt]["thumbnails"]}} alt="">
+                        <div>{{videos_list[ns.cnt]["title"]}}</div>
+                        <div>{{videos_list[ns.cnt]["publish_time"]}}</div>
+                    </div>
+                    <div id="main" v-if="modal_visible == {{ns.cnt}}">
+                        <div class="modal" v-on:click="hide">
+                            <iframe class="video" width="300" height="500" src="/videos/{{videos_list[ns.cnt]['id']}}/{{videos_list[ns.cnt]['title']}}" allowfullscreen></iframe>
+                            <div id="back_button" v-on:click="hide">×</div>
+                        </div>
+                    </div>
+                    {%set ns.cnt = ns.cnt + 1 %}
+                {% endfor %}
+            </div>
+        {% endfor %}
+    </div>
+
+    
+
+</body>
+<script src="{{ url_for('static', filename='js/vue.js') }}"></script>
+<script src="{{ url_for('static', filename='js/video.js') }}"></script>
+<style>
+    .box{
+        width: 323px;
+        height: 320px;
+        overflow-wrap: break-word;
+        display: block;
+        color: black;
+        margin-left: 10px;
+        text-decoration: none;
+    }
+    
+    #big_box{
+        display: flex;
+        overflow: scroll;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+    }
+
+    #bigbox::-webkit-scrollbar {
+        display:none;
+       }
+</style>
+</html>
